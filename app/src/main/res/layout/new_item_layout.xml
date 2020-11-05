@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/spacing_12">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_150"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/iv_cover_image"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="@dimen/spacing_8"
+        app:srcCompat="@drawable/ic_favorite_filled"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/iv_favourite" />
+    
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_title"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_18"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/iv_cover_image"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:text="TITLE"
+        android:maxLines="2"
+        android:ellipsize="end"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="@dimen/spacing_0"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_description"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_author"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:layout_marginEnd="@dimen/spacing_12"
+        android:text="Description"
+        android:maxLines="3"
+        android:ellipsize="end"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_author"
+        android:textColor="@color/black"
+        android:textSize="@dimen/size_16"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:text="Author"
+        android:maxLines="2"
+        android:maxWidth="@dimen/spacing_100"
+        android:ellipsize="end"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

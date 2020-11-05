@@ -1,9 +1,13 @@
 package com.example.furlencotask.di
 
-import com.example.furlencotask.data.constants.AppConstants
+import android.app.Application
+import androidx.paging.ExperimentalPagingApi
 import com.example.furlencotask.data.RepoImpl
+import com.example.furlencotask.data.constants.AppConstants
 import com.example.furlencotask.data.services.networkRequests.GetServices
+import com.example.furlencotask.domain.AppDatabase
 import com.example.furlencotask.domain.Repository
+import com.example.furlencotask.domain.mappers.NewsMapper
 import com.example.furlencotask.domain.usecases.GetNewsUseCase
 import dagger.Module
 import dagger.Provides
@@ -11,7 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -26,37 +30,44 @@ object ClassModules {
 
     @Provides
     @Singleton
-    fun provideRetrofitInstance(httpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder().addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+    fun provideRetrofitInstance(httpClient: OkHttpClient): Retrofit =
+        Retrofit.Builder().addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create()).baseUrl(AppConstants.BASE_URL)
             .client(httpClient)
             .build()
-    }
+
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient {
-        return OkHttpClient().newBuilder().connectTimeout(5, TimeUnit.SECONDS)
+    fun provideHttpClient(): OkHttpClient =
+        OkHttpClient().newBuilder().connectTimeout(5, TimeUnit.SECONDS)
             .readTimeout(5, TimeUnit.SECONDS).build()
-    }
 
+
+    @ExperimentalPagingApi
     @Provides
     @Singleton
-    fun getRepoImpl(getService:GetServices): RepoImpl{
-        return RepoImpl(getService)
+    fun getRepoImpl(database: AppDatabase, getServices: GetServices, mapper: NewsMapper): RepoImpl =
+        RepoImpl(database, getServices, mapper)
+
+    @Provides
+    fun provideAppDataBase(application: Application) = AppDatabase.getInstance(application)
+
+    //mapper
+    @Provides
+    fun getNewsMapper(): NewsMapper {
+        return NewsMapper()
     }
 
     // Services
     @Provides
     @Singleton
-    fun getRequestsService(retrofit: Retrofit): GetServices {
-        return retrofit.create(GetServices::class.java)
-    }
-
+    fun getRequestsService(retrofit: Retrofit): GetServices =
+        retrofit.create(GetServices::class.java)
 
     // Use cases
     @Provides
-    fun provideNewsResultsUseCase(repository: Repository): GetNewsUseCase {
-        return GetNewsUseCase(repository)
-    }
+    fun provideNewsResultsUseCase(repository: Repository): GetNewsUseCase =
+        GetNewsUseCase(repository)
+
 }
