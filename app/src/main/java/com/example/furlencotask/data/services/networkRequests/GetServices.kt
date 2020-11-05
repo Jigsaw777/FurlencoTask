@@ -1,7 +1,7 @@
 package com.example.furlencotask.data.services.networkRequests
 
-import com.example.furlencotask.data.AppConstants
-import com.example.furlencotask.domain.entities.ResponseEntity
+import com.example.furlencotask.data.constants.AppConstants
+import com.example.furlencotask.domain.entities.networkEntities.ResponseEntity
 import io.reactivex.rxjava3.core.Single
 import retrofit2.http.GET
 import retrofit2.http.QueryMap

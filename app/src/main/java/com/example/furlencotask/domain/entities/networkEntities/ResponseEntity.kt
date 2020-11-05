@@ -1,5 +1,6 @@
-package com.example.furlencotask.domain.entities
+package com.example.furlencotask.domain.entities.networkEntities
 
+import com.example.furlencotask.domain.entities.networkEntities.NewsEntity
 import com.google.gson.annotations.SerializedName
 
 /**

@@ -4,27 +4,25 @@ package com.example.furlencotask.ui.activities
  * Created by Sourik on 5/11/20.
  */
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.example.furlencotask.R
-import com.example.furlencotask.ui.viewmodels.MainViewModel
+import com.example.furlencotask.domain.entities.RequestType
+import com.example.furlencotask.ui.adapters.ViewPagerAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val mainViewModel: MainViewModel by viewModels()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        Log.d("ACtiviy",mainViewModel.toString())
-        mainViewModel.resultLD.observe(this,{
-            text.text = it[0].description
-        })
-        mainViewModel.getSearchResults()
+
+        vp_fragments.adapter = ViewPagerAdapter(this)
+        TabLayoutMediator(tab_layout, vp_fragments) { tab, position ->
+            tab.text = RequestType.values()[position].toString()
+        }.attach()
     }
 }

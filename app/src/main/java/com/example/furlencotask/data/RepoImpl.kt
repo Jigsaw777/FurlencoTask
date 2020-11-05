@@ -2,7 +2,7 @@ package com.example.furlencotask.data
 
 import com.example.furlencotask.data.services.networkRequests.GetServices
 import com.example.furlencotask.domain.Repository
-import com.example.furlencotask.domain.entities.ResponseEntity
+import com.example.furlencotask.domain.entities.networkEntities.ResponseEntity
 import com.example.furlencotask.domain.requests.FetchNewsRequest
 import io.reactivex.rxjava3.core.Single
 import javax.inject.Inject

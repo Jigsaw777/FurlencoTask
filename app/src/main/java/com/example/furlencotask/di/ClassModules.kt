@@ -1,6 +1,6 @@
 package com.example.furlencotask.di
 
-import com.example.furlencotask.data.AppConstants
+import com.example.furlencotask.data.constants.AppConstants
 import com.example.furlencotask.data.RepoImpl
 import com.example.furlencotask.data.services.networkRequests.GetServices
 import com.example.furlencotask.domain.Repository

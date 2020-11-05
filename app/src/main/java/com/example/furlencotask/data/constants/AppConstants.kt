@@ -1,4 +1,4 @@
-package com.example.furlencotask.data
+package com.example.furlencotask.data.constants
 
 /**
  * Created by Sourik on 5/11/20.
@@ -10,4 +10,5 @@ object AppConstants {
 
     const val VM_ERROR_MSG="Something went wrong. Please try again."
     const val NO_NETWORK_ERROR="No internet connection. Please try again later."
+    const val REQUEST_TYPE_POSITION = "position"
 }
