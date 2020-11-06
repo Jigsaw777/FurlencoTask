@@ -11,10 +11,10 @@ data class NewsEntity(
     @SerializedName("author") val author: String?,
     @SerializedName("title") val title: String?,
     @SerializedName("description") val description: String?,
-    @SerializedName("url") val newsUrl: String?,
+    @SerializedName("url") val newsUrl: String,
     @SerializedName("urlToImage") val imageUrl: String?,
     @SerializedName("publishedAt") val publishDate: String?,
-    @SerializedName("content") val content: String?
+    @SerializedName("content") val content: String?,
 )
 
 data class SourceEntity(

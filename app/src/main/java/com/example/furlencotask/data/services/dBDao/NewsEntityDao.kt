@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.furlencotask.data.constants.DBConstants
 import com.example.furlencotask.domain.entities.dbEntities.DBNewsEntity
+import io.reactivex.Completable
 import io.reactivex.Single
 
 
@@ -17,15 +18,17 @@ import io.reactivex.Single
 interface NewsEntityDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(news:List<DBNewsEntity>)
+    fun insertAll(news: List<DBNewsEntity>)
 
     @Query(DBConstants.GET_STORED_NEWS)
     fun getNews(type: String): Single<List<DBNewsEntity>>
 
+    @Query(DBConstants.GET_FAVOURITE_NEWS)
+    fun getFavouriteNews(type: String): Single<List<DBNewsEntity>>
+
+    @Query(DBConstants.UPDATE_FAVOURITE)
+    fun updateFavourite(newsUrl: String, isFavourite: Boolean): Completable
+
     @Query(DBConstants.DELETE_NEWS)
     fun clearTable()
-
-    //requestType: String, page: Int = 1
-//    @Query(DBConstants.GET_FAVOURITE_NEWS)
-//    fun getFavouriteNews(): Single<List<NewsModel.DBNewsEntity>>
 }

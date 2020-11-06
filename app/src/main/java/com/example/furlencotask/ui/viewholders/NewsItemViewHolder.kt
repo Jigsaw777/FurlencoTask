@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.new_item_layout.view.*
 class NewsItemViewHolder(
     itemView: View,
     private val onItemClick: (String?) -> Unit,
-    private val onFavouriteIconClicked: (Boolean) -> Unit
+    private val onFavouriteIconClicked: (DBNewsEntity) -> Unit
 ) :
     RecyclerView.ViewHolder(itemView) {
 
@@ -37,7 +37,7 @@ class NewsItemViewHolder(
             }
 
             itemView.iv_favourite.setOnClickListener { _ ->
-                onFavouriteIconClicked.invoke(!it.isFavourite)
+                onFavouriteIconClicked.invoke(it)
             }
         }
     }

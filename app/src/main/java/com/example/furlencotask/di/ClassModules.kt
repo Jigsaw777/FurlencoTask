@@ -6,9 +6,7 @@ import com.example.furlencotask.data.constants.AppConstants
 import com.example.furlencotask.data.services.networkRequests.GetServices
 import com.example.furlencotask.domain.AppDatabase
 import com.example.furlencotask.domain.Repository
-import com.example.furlencotask.domain.usecases.GetNewsFromLocalUseCase
-import com.example.furlencotask.domain.usecases.GetNewsUseCase
-import com.example.furlencotask.domain.usecases.InsertNewsUseCase
+import com.example.furlencotask.domain.usecases.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -70,5 +68,13 @@ object ClassModules {
     @Provides
     fun provideNewsUseCaseForLocal(repository: Repository): GetNewsFromLocalUseCase =
         GetNewsFromLocalUseCase(repository)
+
+    @Provides
+    fun getFavouritesUseCase(repository: Repository): GetFavouritesUseCase =
+        GetFavouritesUseCase(repository)
+
+    @Provides
+    fun updateFavouriteUseCase(repository: Repository): UpdateFavouriteValueUseCase =
+        UpdateFavouriteValueUseCase(repository)
 
 }

@@ -5,12 +5,14 @@ import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.furlencotask.data.constants.AppConstants
 import com.example.furlencotask.domain.entities.RequestType
 import com.example.furlencotask.domain.entities.dbEntities.DBNewsEntity
 import com.example.furlencotask.domain.requests.FetchNewsRequest
 import com.example.furlencotask.domain.usecases.GetNewsFromLocalUseCase
 import com.example.furlencotask.domain.usecases.GetNewsUseCase
 import com.example.furlencotask.domain.usecases.InsertNewsUseCase
+import com.example.furlencotask.domain.usecases.UpdateFavouriteValueUseCase
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -24,16 +26,33 @@ import java.util.*
 class GenericViewModel @ViewModelInject constructor(
     private val getNewsUseCase: GetNewsUseCase,
     private val insertNewsUseCase: InsertNewsUseCase,
-    private val getNewsFromLocalUseCase: GetNewsFromLocalUseCase
+    private val getNewsFromLocalUseCase: GetNewsFromLocalUseCase,
+    private val updateFavouriteValueUseCase: UpdateFavouriteValueUseCase
 ) : ViewModel() {
 
     private val compositeDisposable = CompositeDisposable()
     private val resultsLD = MutableLiveData<List<DBNewsEntity>>()
+    private val isListEmpty = MutableLiveData<Boolean>()
+    private val successLD = MutableLiveData<String>()
+    private val errorLD = MutableLiveData<String>()
+    private val changeFavLD = MutableLiveData<Pair<String, Boolean>>()
 
     val newsResultsLD: LiveData<List<DBNewsEntity>>
         get() = resultsLD
 
-    fun getNews(position:Int){
+    val listEmptyLD: LiveData<Boolean>
+        get() = isListEmpty
+
+    val successMsg: LiveData<String>
+        get() = successLD
+
+    val errorMsg: LiveData<String>
+        get() = errorLD
+
+    val changeFavouriteLD: LiveData<Pair<String, Boolean>>
+        get() = changeFavLD
+
+    fun getNews(position: Int) {
         val request = FetchNewsRequest(category = RequestType.values()[position], pageNumber = 1)
         getNewsUseCase.getNews(request)
             .subscribeOn(Schedulers.io())
@@ -61,7 +80,7 @@ class GenericViewModel @ViewModelInject constructor(
                 }
                 Single.just(insertNewsUseCase.insertNews(dbNewsList)).subscribeOn(Schedulers.io())
                     .subscribe({
-                        getItemsFromLocal(RequestType.values()[position])
+                        fetchNewsFromLocal(position)
                     }, { error ->
                         error.printStackTrace()
                     })
@@ -73,14 +92,32 @@ class GenericViewModel @ViewModelInject constructor(
             }
     }
 
-    private fun getItemsFromLocal(type: RequestType) {
-        getNewsFromLocalUseCase.getNewsFromLocal(type).subscribeOn(Schedulers.io()).subscribe({
-            resultsLD.postValue(it)
-        },{
-            it.printStackTrace()
-        }).let {
-            compositeDisposable.add(it)
-        }
+    fun fetchNewsFromLocal(position: Int) {
+        getNewsFromLocalUseCase.getNewsFromLocal(RequestType.values()[position])
+            .subscribeOn(Schedulers.io()).subscribe({
+                resultsLD.postValue(it)
+            }, {
+                it.printStackTrace()
+            }).let {
+                compositeDisposable.add(it)
+            }
+    }
+
+    fun isTableEmpty(position: Int) {
+        getNewsFromLocalUseCase.getNewsFromLocal(RequestType.values()[position])
+            .subscribeOn(Schedulers.io()).subscribe({
+                isListEmpty.postValue(it.isEmpty())
+            }, { it.printStackTrace() }).let { compositeDisposable.add(it) }
+    }
+
+    fun toggleFavouriteValue(entity: DBNewsEntity) {
+        val isFavourite = !entity.isFavourite
+        updateFavouriteValueUseCase.updateValue(entity.newsUrl, isFavourite)
+            .subscribeOn(Schedulers.io()).subscribe({
+                successLD.postValue(if (isFavourite) AppConstants.ADDED_FAVOURITES else AppConstants.REMOVED_FAVOURITES)
+                changeFavLD.postValue(entity.newsUrl to isFavourite)
+            }, { it.printStackTrace() })
+            .let { compositeDisposable.add(it) }
     }
 
     override fun onCleared() {

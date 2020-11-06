@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.fragments.ShowNewsFragment"
+    android:animateLayoutChanges="true">
+
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_4"
+        android:id="@+id/pb_webview"
+        style="?android:attr/progressBarStyleHorizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        android:progressBackgroundTint="@color/faded_white"
+        android:progressTint="@color/dark_blue"/>
+
+    <WebView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/spacing_0"
+        android:id="@+id/wv_news"
+        app:layout_constraintTop_toBottomOf="@+id/pb_webview"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

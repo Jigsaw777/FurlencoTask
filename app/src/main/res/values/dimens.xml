@@ -17,6 +17,7 @@
     <dimen name="spacing_60">60dp</dimen>
     <dimen name="spacing_100">100dp</dimen>
     <dimen name="spacing_150">150dp</dimen>
+    <dimen name="spacing_200">200dp</dimen>
 
 
     <!-- text sizes -->

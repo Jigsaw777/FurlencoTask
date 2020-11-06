@@ -15,11 +15,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity(tableName = DBConstants.NEWS_TABLE)
 data class DBNewsEntity(
-
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = DBConstants.ID)
-    val id: Long = 0,
-
     @ColumnInfo(name = DBConstants.AUTHOR)
     val author: String?,
 
@@ -29,8 +24,9 @@ data class DBNewsEntity(
     @ColumnInfo(name = DBConstants.DESCRIPTION)
     val description: String?,
 
+    @PrimaryKey
     @ColumnInfo(name = DBConstants.NEWS_URL)
-    val newsUrl: String?,
+    val newsUrl: String,
 
     @ColumnInfo(name = DBConstants.IMAGE_URL)
     val imageUrl: String?,

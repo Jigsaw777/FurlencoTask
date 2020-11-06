@@ -13,14 +13,33 @@ import com.example.furlencotask.ui.viewholders.NewsItemViewHolder
 
 class NewsItemAdapter(
     private val onItemClicked: (String?) -> Unit,
-    private val onFavouriteItemClicked: (Boolean) -> Unit
+    private val onFavouriteItemClicked: (DBNewsEntity) -> Unit
 ) : RecyclerView.Adapter<NewsItemViewHolder>() {
 
     private var list = mutableListOf<DBNewsEntity>()
 
-    fun setItems(items : List<DBNewsEntity>){
+    fun setItems(items: List<DBNewsEntity>) {
         list.addAll(items)
         notifyDataSetChanged()
+    }
+
+    fun updateItem(pair: Pair<String, Boolean>) {
+        val item = list.first { element -> element.newsUrl == pair.first }
+        val updatedItem = DBNewsEntity(
+            author = item.author,
+            title = item.title,
+            description = item.description,
+            newsUrl = item.newsUrl,
+            imageUrl = item.imageUrl,
+            publishDateInMillis = item.publishDateInMillis,
+            content = item.content,
+            type = item.type,
+            isFavourite = pair.second
+        )
+        val pos = list.indexOf(item)
+        list.removeAt(pos)
+        list.add(pos, updatedItem)
+        notifyItemChanged(pos)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsItemViewHolder {
