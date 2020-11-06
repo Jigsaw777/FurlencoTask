@@ -1,14 +1,14 @@
 package com.example.furlencotask.di
 
 import android.app.Application
-import androidx.paging.ExperimentalPagingApi
 import com.example.furlencotask.data.RepoImpl
 import com.example.furlencotask.data.constants.AppConstants
 import com.example.furlencotask.data.services.networkRequests.GetServices
 import com.example.furlencotask.domain.AppDatabase
 import com.example.furlencotask.domain.Repository
-import com.example.furlencotask.domain.mappers.NewsMapper
+import com.example.furlencotask.domain.usecases.GetNewsFromLocalUseCase
 import com.example.furlencotask.domain.usecases.GetNewsUseCase
+import com.example.furlencotask.domain.usecases.InsertNewsUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,20 +44,13 @@ object ClassModules {
             .readTimeout(5, TimeUnit.SECONDS).build()
 
 
-    @ExperimentalPagingApi
     @Provides
     @Singleton
-    fun getRepoImpl(database: AppDatabase, getServices: GetServices, mapper: NewsMapper): RepoImpl =
-        RepoImpl(database, getServices, mapper)
+    fun getRepoImpl(database: AppDatabase, getServices: GetServices): RepoImpl =
+        RepoImpl(database, getServices)
 
     @Provides
     fun provideAppDataBase(application: Application) = AppDatabase.getInstance(application)
-
-    //mapper
-    @Provides
-    fun getNewsMapper(): NewsMapper {
-        return NewsMapper()
-    }
 
     // Services
     @Provides
@@ -69,5 +62,13 @@ object ClassModules {
     @Provides
     fun provideNewsResultsUseCase(repository: Repository): GetNewsUseCase =
         GetNewsUseCase(repository)
+
+    @Provides
+    fun provideInsertNewsUseCase(repository: Repository): InsertNewsUseCase =
+        InsertNewsUseCase(repository)
+
+    @Provides
+    fun provideNewsUseCaseForLocal(repository: Repository): GetNewsFromLocalUseCase =
+        GetNewsFromLocalUseCase(repository)
 
 }

@@ -1,12 +1,10 @@
 package com.example.furlencotask.ui.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.paging.PagingDataAdapter
-import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
 import com.example.furlencotask.R
-import com.example.furlencotask.domain.entities.dbEntities.NewsModel
+import com.example.furlencotask.domain.entities.dbEntities.DBNewsEntity
 import com.example.furlencotask.ui.viewholders.NewsItemViewHolder
 
 /**
@@ -16,18 +14,13 @@ import com.example.furlencotask.ui.viewholders.NewsItemViewHolder
 class NewsItemAdapter(
     private val onItemClicked: (String?) -> Unit,
     private val onFavouriteItemClicked: (Boolean) -> Unit
-) : PagingDataAdapter<NewsModel.DBNewsEntity, NewsItemViewHolder>(diffCallback) {
+) : RecyclerView.Adapter<NewsItemViewHolder>() {
 
-    companion object {
-        private val diffCallback = object : DiffUtil.ItemCallback<NewsModel.DBNewsEntity>() {
-            override fun areItemsTheSame(oldItem: NewsModel.DBNewsEntity, newItem: NewsModel.DBNewsEntity): Boolean {
-                return oldItem.id == newItem.id
-            }
+    private var list = mutableListOf<DBNewsEntity>()
 
-            override fun areContentsTheSame(oldItem: NewsModel.DBNewsEntity, newItem: NewsModel.DBNewsEntity): Boolean {
-                return oldItem == newItem
-            }
-        }
+    fun setItems(items : List<DBNewsEntity>){
+        list.addAll(items)
+        notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsItemViewHolder {
@@ -39,7 +32,9 @@ class NewsItemAdapter(
     }
 
     override fun onBindViewHolder(holder: NewsItemViewHolder, position: Int) {
-        holder.setData(getItem(position))
+        holder.setData(list[position])
     }
+
+    override fun getItemCount(): Int = list.size
 
 }

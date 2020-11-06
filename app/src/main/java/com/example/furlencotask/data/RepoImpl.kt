@@ -1,18 +1,13 @@
 package com.example.furlencotask.data
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.rxjava2.flowable
 import com.example.furlencotask.data.services.networkRequests.GetServices
 import com.example.furlencotask.domain.AppDatabase
 import com.example.furlencotask.domain.Repository
-import com.example.furlencotask.domain.entities.dbEntities.NewsModel
-import com.example.furlencotask.domain.mappers.NewsMapper
-import com.example.furlencotask.domain.mappers.RemoteNewsMediator
+import com.example.furlencotask.domain.entities.RequestType
+import com.example.furlencotask.domain.entities.dbEntities.DBNewsEntity
+import com.example.furlencotask.domain.entities.networkEntities.ResponseEntity
 import com.example.furlencotask.domain.requests.FetchNewsRequest
-import io.reactivex.Flowable
+import io.reactivex.Single
 import javax.inject.Inject
 
 /**
@@ -22,24 +17,18 @@ import javax.inject.Inject
 class RepoImpl
 @Inject constructor(
     private val database: AppDatabase,
-    private val getRequestsService: GetServices,
-    private val mapper: NewsMapper
+    private val getRequestsService: GetServices
 ) : Repository {
 
-    @ExperimentalPagingApi
-    override fun getNews(newsRequest: FetchNewsRequest): Flowable<PagingData<NewsModel.DBNewsEntity>> {
-        val remoteNewsMediator = RemoteNewsMediator(getRequestsService, database, mapper, newsRequest)
-        return Pager(
-            config = PagingConfig(
-                pageSize = 10,
-                enablePlaceholders = true,
-                prefetchDistance = 10,
-                initialLoadSize = 10
-            ),
-            remoteMediator = remoteNewsMediator,
-            pagingSourceFactory = { database.newsEntityDao().getNews() }
-        ).flowable
+    override fun getNewsFromLocal(newsRequest: FetchNewsRequest): Single<ResponseEntity> {
+        return getRequestsService.getNews(newsRequest.getParams())
     }
 
+    override fun getNewsFromLocal(type: RequestType): Single<List<DBNewsEntity>> {
+        return database.newsEntityDao().getNews(type = type.requestString)
+    }
 
+    override fun insertNews(list: List<DBNewsEntity>) {
+        database.newsEntityDao().insertAll(list)
+    }
 }

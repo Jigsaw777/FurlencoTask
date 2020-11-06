@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.furlencotask.R
-import com.example.furlencotask.domain.entities.dbEntities.NewsModel
+import com.example.furlencotask.domain.entities.dbEntities.DBNewsEntity
 import kotlinx.android.synthetic.main.new_item_layout.view.*
 
 /**
@@ -18,26 +18,26 @@ class NewsItemViewHolder(
 ) :
     RecyclerView.ViewHolder(itemView) {
 
-    fun setData(entity: NewsModel.DBNewsEntity?) {
+    fun setData(entity: DBNewsEntity) {
         entity.let {
             Glide.with(itemView.context)
-                .load(it?.imageUrl)
+                .load(it.imageUrl)
                 .placeholder(R.drawable.ic_image_placeholder)
                 .into(itemView.iv_cover_image)
-            itemView.tv_title.text = it?.title
-            itemView.tv_description.text = it?.description
-            itemView.tv_author.text = it?.author
-            if (it?.isFavourite == true)
+            itemView.tv_title.text = it.title
+            itemView.tv_description.text = it.description
+            itemView.tv_author.text = it.author
+            if (it.isFavourite)
                 itemView.iv_favourite.setImageResource(R.drawable.ic_favorite_filled)
             else
                 itemView.iv_favourite.setImageResource(R.drawable.ic_favorite_border)
 
             itemView.setOnClickListener { _ ->
-                onItemClick.invoke(it?.newsUrl)
+                onItemClick.invoke(it.newsUrl)
             }
 
             itemView.iv_favourite.setOnClickListener { _ ->
-                onFavouriteIconClicked.invoke(!(it?.isFavourite ?: true))
+                onFavouriteIconClicked.invoke(!it.isFavourite)
             }
         }
     }

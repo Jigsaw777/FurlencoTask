@@ -1,12 +1,12 @@
-package com.example.furlencotask.data.services.localDBRequests
+package com.example.furlencotask.data.services.dBDao
 
-import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.furlencotask.data.constants.DBConstants
-import com.example.furlencotask.domain.entities.dbEntities.NewsModel
+import com.example.furlencotask.domain.entities.dbEntities.DBNewsEntity
+import io.reactivex.Single
 
 
 /**
@@ -17,10 +17,10 @@ import com.example.furlencotask.domain.entities.dbEntities.NewsModel
 interface NewsEntityDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(news:List<NewsModel.DBNewsEntity>)
+    fun insertAll(news:List<DBNewsEntity>)
 
     @Query(DBConstants.GET_STORED_NEWS)
-    fun getNews(): PagingSource <Int, NewsModel.DBNewsEntity>
+    fun getNews(type: String): Single<List<DBNewsEntity>>
 
     @Query(DBConstants.DELETE_NEWS)
     fun clearTable()
