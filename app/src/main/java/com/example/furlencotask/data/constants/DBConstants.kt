@@ -20,9 +20,14 @@ object DBConstants {
     const val TYPE = "request_type"
     const val IS_FAVOURITE = "is_favourite"
 
-    const val GET_STORED_NEWS = "SELECT * FROM $NEWS_TABLE ORDER BY $PUBLISH_DATE DESC"
+    const val GET_STORED_NEWS =
+        "SELECT * FROM $NEWS_TABLE ORDER BY $PUBLISH_DATE DESC"
 
     const val GET_FAVOURITE_NEWS = "Select * FROM $NEWS_TABLE"
 
     const val DELETE_NEWS = "DELETE FROM $NEWS_TABLE"
+
+    const val REMOTE_KEYS = "SELECT * FROM $NEWS_REMOTE_KEY_TABLE WHERE newsId = :newsId"
+
+    const val CLEAR_REMOTE_KEYS = "DELETE FROM $NEWS_REMOTE_KEY_TABLE"
 }

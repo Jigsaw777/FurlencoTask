@@ -28,6 +28,7 @@ class RepoImpl
 
     @ExperimentalPagingApi
     override fun getNews(newsRequest: FetchNewsRequest): Flowable<PagingData<NewsModel.DBNewsEntity>> {
+        val remoteNewsMediator = RemoteNewsMediator(getRequestsService, database, mapper, newsRequest)
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -35,7 +36,7 @@ class RepoImpl
                 prefetchDistance = 10,
                 initialLoadSize = 10
             ),
-            remoteMediator = RemoteNewsMediator(getRequestsService, database, mapper, newsRequest),
+            remoteMediator = remoteNewsMediator,
             pagingSourceFactory = { database.newsEntityDao().getNews() }
         ).flowable
     }

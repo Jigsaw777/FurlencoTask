@@ -9,11 +9,11 @@ import com.google.gson.annotations.SerializedName
 data class NewsEntity(
     @SerializedName("source") val sourceEntity: SourceEntity,
     @SerializedName("author") val author: String?,
-    @SerializedName("title") val title: String,
-    @SerializedName("description") val description: String,
-    @SerializedName("url") val newsUrl: String,
-    @SerializedName("imageUrl") val imageUrl: String,
-    @SerializedName("published_date") val publishDate: String,
+    @SerializedName("title") val title: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("url") val newsUrl: String?,
+    @SerializedName("urlToImage") val imageUrl: String?,
+    @SerializedName("publishedAt") val publishDate: String?,
     @SerializedName("content") val content: String?
 )
 

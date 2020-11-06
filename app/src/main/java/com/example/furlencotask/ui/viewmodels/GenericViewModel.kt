@@ -1,5 +1,6 @@
 package com.example.furlencotask.ui.viewmodels
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,8 +33,10 @@ class GenericViewModel @ViewModelInject constructor(
         getNewsUseCase.getNews(request)
             .subscribeOn(Schedulers.io())
             .subscribe({
+                Log.d("VM","got data : $it")
                 resultsLD.postValue(it)
             },{
+                Log.d("VM","got error")
                 it.printStackTrace()
             }).let {
                 compositeDisposable.add(it)

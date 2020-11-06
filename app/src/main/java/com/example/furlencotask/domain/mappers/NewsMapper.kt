@@ -1,5 +1,6 @@
 package com.example.furlencotask.domain.mappers
 
+import android.util.Log
 import com.example.furlencotask.domain.entities.RequestType
 import com.example.furlencotask.domain.entities.dbEntities.NewsModel
 import com.example.furlencotask.domain.entities.networkEntities.ResponseEntity
@@ -26,11 +27,11 @@ class NewsMapper @Inject constructor() {
                         newsUrl = it.newsUrl,
                         imageUrl = it.imageUrl,
                         publishDateInMillis = it.publishDate.let { date ->
-                            if (date.isEmpty())
+                            if (date.isNullOrEmpty())
                                 0L
                             else
                                 SimpleDateFormat(
-                                    "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",
+                                    "yyyy-MM-dd'T'HH:mm:ss'Z'",
                                     locale
                                 ).parse(date).time
                         },

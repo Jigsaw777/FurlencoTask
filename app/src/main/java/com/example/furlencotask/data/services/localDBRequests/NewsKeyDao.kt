@@ -17,10 +17,9 @@ interface NewsKeyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(remoteKey: List<NewsModel.NewsRemoteKeys>)
 
-    @Query("SELECT * FROM ${DBConstants.NEWS_REMOTE_KEY_TABLE} WHERE newsId = :newsId")
+    @Query(DBConstants.REMOTE_KEYS)
     fun remoteKeysById(newsId: Long): NewsModel.NewsRemoteKeys?
 
-    @Query("DELETE FROM ${DBConstants.NEWS_REMOTE_KEY_TABLE}")
+    @Query(DBConstants.CLEAR_REMOTE_KEYS)
     fun clearRemoteKeys()
-
 }

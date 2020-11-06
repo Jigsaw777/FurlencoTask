@@ -1,5 +1,6 @@
 package com.example.furlencotask.domain.mappers
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -31,6 +32,7 @@ class RemoteNewsMediator @Inject constructor(
         loadType: LoadType,
         state: PagingState<Int, NewsModel.DBNewsEntity>
     ): Single<MediatorResult> {
+        Log.d("Mediator", loadType.name)
         return Single.just(loadType)
             .subscribeOn(Schedulers.io())
             .map {
@@ -54,6 +56,7 @@ class RemoteNewsMediator @Inject constructor(
                 }
             }
             .flatMap { page ->
+                Log.d("Mediator","Page : $page")
                 if (page == -1) {
                     Single.just(MediatorResult.Success(endOfPaginationReached = true))
                 } else {
@@ -69,13 +72,18 @@ class RemoteNewsMediator @Inject constructor(
                         }
                         .map { insertToDB(page, loadType, it) }
                         .map<MediatorResult> { MediatorResult.Success(endOfPaginationReached = it.endOfPage) }
-                        .onErrorReturn { MediatorResult.Error(it) }
+                        .onErrorReturn {
+                            it.printStackTrace()
+                            MediatorResult.Error(it) }
                 }
             }
-            .onErrorReturn { MediatorResult.Error(it) }
+            .onErrorReturn {
+                it.printStackTrace()
+                MediatorResult.Error(it) }
 
     }
 
+    @Suppress("DEPRECATION")
     private fun insertToDB(page: Int, loadType: LoadType, data: NewsModel): NewsModel {
         database.beginTransaction()
 

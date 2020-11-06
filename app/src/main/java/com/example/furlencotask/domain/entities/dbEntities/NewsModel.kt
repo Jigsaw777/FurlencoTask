@@ -34,19 +34,19 @@ data class NewsModel(
         val author: String?,
 
         @ColumnInfo(name = DBConstants.TITLE)
-        val title: String,
+        val title: String?,
 
         @ColumnInfo(name = DBConstants.DESCRIPTION)
-        val description: String,
+        val description: String?,
 
         @ColumnInfo(name = DBConstants.NEWS_URL)
-        val newsUrl: String,
+        val newsUrl: String?,
 
         @ColumnInfo(name = DBConstants.IMAGE_URL)
-        val imageUrl: String,
+        val imageUrl: String?,
 
         @ColumnInfo(name = DBConstants.PUBLISH_DATE)
-        val publishDateInMillis: Long,
+        val publishDateInMillis: Long?,
 
         @ColumnInfo(name = DBConstants.CONTENT)
         val content: String?,

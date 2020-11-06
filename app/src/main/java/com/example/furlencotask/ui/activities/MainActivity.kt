@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
         vp_fragments.adapter = ViewPagerAdapter(this)
         TabLayoutMediator(tab_layout, vp_fragments) { tab, position ->
             tab.text = RequestType.values()[position].toString()
