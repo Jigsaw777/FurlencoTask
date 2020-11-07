@@ -71,11 +71,9 @@ class GenericViewListFragment : Fragment() {
 
     private fun initListeners(){
         viewModel.newsResultsLD.observe(viewLifecycleOwner, {
-            if (it.isEmpty()) {
-                tv_blank_content.visibility = View.VISIBLE
-            } else {
-                viewModel.pageNumber += 1
+            if (it.isNotEmpty()) {
                 tv_blank_content.visibility = View.GONE
+                viewModel.pageNumber += 1
             }
             pb_loading.visibility = View.GONE
             adapter.setItems(it)
@@ -109,8 +107,9 @@ class GenericViewListFragment : Fragment() {
         viewModel.rowCountSetLD.observe(viewLifecycleOwner, {
             if (it) {
                 viewModel.isTableEmpty(params ?: 0)
-            } else
-                Toast.makeText(context, AppConstants.VM_ERROR_MSG, Toast.LENGTH_SHORT).show()
+            } else {
+                tv_blank_content.visibility = View.VISIBLE
+            }
         })
 
         rv_news.addOnScrollListener(object : RecyclerView.OnScrollListener() {
