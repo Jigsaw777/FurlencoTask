@@ -97,12 +97,17 @@ class GenericViewListFragment : Fragment() {
             adapter.updateItem(it)
         })
 
+        activityVM.isNetworkAvailable.observe(viewLifecycleOwner, {
+            viewModel.canFetch = it
+            viewModel.getNews(params ?: 0)
+        })
+
         viewModel.successMsg.observe(viewLifecycleOwner, {
-            Toast.makeText(context, "it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         })
 
         viewModel.errorMsg.observe(viewLifecycleOwner, {
-            Toast.makeText(context, "it", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
         })
 
         viewModel.rowCountSetLD.observe(viewLifecycleOwner, {

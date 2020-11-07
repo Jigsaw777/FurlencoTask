@@ -8,8 +8,9 @@ object AppConstants {
     const val BASE_URL = "https://newsapi.org/"
     const val GET_NEWS_ENDPOINT = "v2/top-headlines/"
 
-    const val VM_ERROR_MSG = "Something went wrong. Please try again."
     const val NO_NETWORK_ERROR = "No internet connection. Please try again later."
+    const val PAGINATION_NETWORK_ERROR =
+        "No internet connection at this point of time. Please wait for internet to come back. App will automatically resume your doanload"
     const val REQUEST_TYPE_POSITION = "position"
     const val NEWS_URL = "news_url"
 

@@ -29,6 +29,8 @@ class MainViewModel @ViewModelInject constructor(
         onFavouriteChangedLD.postValue(pair)
     }
 
+    val isNetworkAvailable = MutableLiveData<Boolean>()
+
     fun clearAllData() {
         clearTableUseCase.clearTables().subscribeOn(Schedulers.io()).subscribe({
             onFinishedClearLD.postValue(true)

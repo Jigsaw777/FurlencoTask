@@ -36,6 +36,8 @@ class GenericViewModel @ViewModelInject constructor(
     private val settingRowCountLD = MutableLiveData<Boolean>()
 
     var pageNumber = 1;
+    var canFetch: Boolean = false
+
     private var itemsDownloadedAlready = 0
 
     val newsResultsLD: LiveData<List<DBNewsEntity>>
@@ -57,50 +59,53 @@ class GenericViewModel @ViewModelInject constructor(
         get() = settingRowCountLD
 
     fun getNews(position: Int) {
-        if ((pageNumber * 10) > itemsDownloadedAlready) {
-            Log.d("VM", "Fetching from remote......... count = $itemsDownloadedAlready")
-            val request = FetchNewsRequest(category = RequestType.values()[position], pageNumber)
-            getNewsUseCase.getNews(request)
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    val dbNewsList = it.articles.map { newsEntity ->
-                        DBNewsEntity(
-                            author = newsEntity.author,
-                            title = newsEntity.title,
-                            description = newsEntity.description,
-                            newsUrl = newsEntity.newsUrl,
-                            imageUrl = newsEntity.imageUrl,
-                            publishDateInMillis = newsEntity.publishDate.let { date ->
-                                if (date.isNullOrEmpty())
-                                    0L
-                                else
-                                    SimpleDateFormat(
-                                        "yyyy-MM-dd'T'HH:mm:ss'Z'",
-                                        Locale.getDefault()
-                                    ).parse(date).time
-                            },
-                            content = newsEntity.content,
-                            type = RequestType.values()[position].requestString,
-                            isFavourite = false
-                        )
+        if(canFetch) {
+            if ((pageNumber * 10) > itemsDownloadedAlready) {
+                val request =
+                    FetchNewsRequest(category = RequestType.values()[position], pageNumber)
+                getNewsUseCase.getNews(request)
+                    .subscribeOn(Schedulers.io())
+                    .subscribe({
+                        val dbNewsList = it.articles.map { newsEntity ->
+                            DBNewsEntity(
+                                author = newsEntity.author,
+                                title = newsEntity.title,
+                                description = newsEntity.description,
+                                newsUrl = newsEntity.newsUrl,
+                                imageUrl = newsEntity.imageUrl,
+                                publishDateInMillis = newsEntity.publishDate.let { date ->
+                                    if (date.isNullOrEmpty())
+                                        0L
+                                    else
+                                        SimpleDateFormat(
+                                            "yyyy-MM-dd'T'HH:mm:ss'Z'",
+                                            Locale.getDefault()
+                                        ).parse(date).time
+                                },
+                                content = newsEntity.content,
+                                type = RequestType.values()[position].requestString,
+                                isFavourite = false
+                            )
+                        }
+                        insertNewsUseCase.insertNews(dbNewsList)
+                            .subscribeOn(Schedulers.io())
+                            .subscribe({
+                                fetchNewsFromLocal(position)
+                            }, { error ->
+                                error.printStackTrace()
+                            })
+                    }, {
+                        Log.d("VM", "got error")
+                        it.printStackTrace()
+                    }).let {
+                        compositeDisposable.add(it)
                     }
-                    insertNewsUseCase.insertNews(dbNewsList)
-                        .subscribeOn(Schedulers.io())
-                        .subscribe({
-                            fetchNewsFromLocal(position)
-                        }, { error ->
-                            error.printStackTrace()
-                        })
-                }, {
-                    Log.d("VM", "got error")
-                    it.printStackTrace()
-                }).let {
-                    compositeDisposable.add(it)
-                }
-        } else {
-            Log.d("VM", "Fetching from local........... count = $itemsDownloadedAlready")
-            fetchNewsFromLocal(position)
+            } else {
+                fetchNewsFromLocal(position)
+            }
         }
+        else
+            errorLD.postValue(AppConstants.PAGINATION_NETWORK_ERROR)
     }
 
     fun fetchNewsFromLocal(position: Int) {

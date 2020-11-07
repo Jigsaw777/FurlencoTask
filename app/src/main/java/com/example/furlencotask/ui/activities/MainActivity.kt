@@ -4,6 +4,9 @@ package com.example.furlencotask.ui.activities
  * Created by Sourik on 5/11/20.
  */
 
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.Network
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -30,6 +33,17 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initViewsAndListeners()
+
+        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback(){
+            override fun onAvailable(network: Network) {
+                mainViewModel.isNetworkAvailable.postValue(true)
+            }
+
+            override fun onLost(network: Network) {
+                mainViewModel.isNetworkAvailable.postValue(false)
+            }
+        })
     }
 
     private fun initViewsAndListeners() {
