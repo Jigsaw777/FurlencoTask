@@ -17,6 +17,16 @@
         android:id="@+id/pb_loading"
         android:visibility="visible"/>
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/pb_pagination"
+        android:visibility="gone"
+        android:elevation="@dimen/spacing_8"/>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

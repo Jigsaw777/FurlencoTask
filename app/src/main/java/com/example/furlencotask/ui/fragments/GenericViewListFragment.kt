@@ -75,6 +75,7 @@ class GenericViewListFragment : Fragment() {
                 tv_blank_content.visibility = View.GONE
                 viewModel.pageNumber += 1
             }
+            pb_pagination.visibility = View.GONE
             pb_loading.visibility = View.GONE
             adapter.setItems(it)
         })
@@ -123,6 +124,7 @@ class GenericViewListFragment : Fragment() {
                 super.onScrolled(recyclerView, dx, dy)
                 if (isScrolling && (manager.childCount + manager.findFirstVisibleItemPosition() == manager.itemCount)) {
                     isScrolling = false
+                    pb_pagination.visibility = View.VISIBLE
                     viewModel.getNews(
                         params ?: 0
                     )
