@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), OnItemClick {
         setContentView(R.layout.activity_main)
         initViewsAndListeners()
 
+        //listens to internet connectivity
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback(){
             override fun onAvailable(network: Network) {
@@ -54,6 +55,12 @@ class MainActivity : AppCompatActivity(), OnItemClick {
 
         btn_favourite.setOnClickListener {
             supportFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
                 .add(R.id.fragment_container, FavouritesBaseFragment.newInstance())
                 .addToBackStack(null).commit()
         }

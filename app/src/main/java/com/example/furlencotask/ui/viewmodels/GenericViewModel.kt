@@ -35,7 +35,10 @@ class GenericViewModel @ViewModelInject constructor(
     private val changeFavLD = MutableLiveData<Pair<String, Boolean>>()
     private val settingRowCountLD = MutableLiveData<Boolean>()
 
+    //page Number keeps track of pages of the list
     var pageNumber = 1;
+
+    //decides whether the list can be fetched or not
     var canFetch: Boolean = false
 
     private var itemsDownloadedAlready = 0
