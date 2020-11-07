@@ -1,4 +1,4 @@
-package com.example.furlencotask.domain
+package com.example.furlencotask
 
 import android.content.Context
 import androidx.room.Database

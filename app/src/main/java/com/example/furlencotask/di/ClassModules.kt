@@ -4,7 +4,7 @@ import android.app.Application
 import com.example.furlencotask.data.RepoImpl
 import com.example.furlencotask.data.constants.AppConstants
 import com.example.furlencotask.data.services.networkRequests.GetServices
-import com.example.furlencotask.domain.AppDatabase
+import com.example.furlencotask.AppDatabase
 import com.example.furlencotask.domain.Repository
 import com.example.furlencotask.domain.usecases.*
 import dagger.Module

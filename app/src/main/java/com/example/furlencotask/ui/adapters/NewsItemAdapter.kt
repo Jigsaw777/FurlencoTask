@@ -42,6 +42,15 @@ class NewsItemAdapter(
         notifyItemChanged(pos)
     }
 
+    fun removeItem(pair: Pair<String, Boolean>) {
+        val item = list.first { element -> element.newsUrl == pair.first }
+        if (!pair.second) {
+            val pos = list.indexOf(item)
+            list.removeAt(pos)
+            notifyItemRemoved(pos)
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsItemViewHolder {
         return NewsItemViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.new_item_layout, parent, false),

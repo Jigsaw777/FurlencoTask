@@ -12,27 +12,23 @@ import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.furlencotask.R
 import com.example.furlencotask.data.constants.AppConstants
 import com.example.furlencotask.ui.adapters.NewsItemAdapter
-import com.example.furlencotask.ui.viewmodels.GenericViewModel
+import com.example.furlencotask.ui.viewmodels.GenericFavsViewModel
 import com.example.furlencotask.ui.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_generic_view_list.*
 
-interface OnItemClick {
-    fun onClick(url: String)
-}
-
 @AndroidEntryPoint
-class GenericViewListFragment : Fragment() {
+class GenericFavsViewListFragment : Fragment() {
 
     private var params: Int? = null
 
-    private lateinit var adapter: NewsItemAdapter
-
     private lateinit var onItemClick: OnItemClick
 
-    private val viewModel: GenericViewModel by viewModels()
+    private val viewModel: GenericFavsViewModel by viewModels()
 
     private val activityVM: MainViewModel by activityViewModels()
+
+    private lateinit var adapter: NewsItemAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,14 +40,13 @@ class GenericViewListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         params = arguments?.getInt(AppConstants.REQUEST_TYPE_POSITION)
 
         adapter = NewsItemAdapter({
-            showNews(it ?: "")
-        }, {
-            viewModel.toggleFavouriteValue(it)
-        })
+            showNews(it ?: "")},
+            {
+                viewModel.toggleFavouriteValue(it)
+            })
         rv_news.layoutManager = LinearLayoutManager(context)
         (rv_news.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_news.adapter = adapter
@@ -60,22 +55,12 @@ class GenericViewListFragment : Fragment() {
             adapter.setItems(it)
         })
 
-        viewModel.listEmptyLD.observe(viewLifecycleOwner, {
-            if (it)
-                viewModel.getNews(params ?: 0)
-            else
-                viewModel.fetchNewsFromLocal(params ?: 0)
-        })
-
         viewModel.changeFavouriteLD.observe(viewLifecycleOwner, {
-            adapter.updateItem(it)
+            adapter.removeItem(it)
+            activityVM.onChangeFav(it)
         })
 
-        activityVM.onChangedFav.observe(viewLifecycleOwner,{
-            adapter.updateItem(it)
-        })
-
-        viewModel.isTableEmpty(params ?: 0)
+        viewModel.getFavs(params ?: 0)
     }
 
     fun setReference(onItemClick: OnItemClick) {
@@ -89,7 +74,7 @@ class GenericViewListFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(position: Int) =
-            GenericViewListFragment().apply {
+            GenericFavsViewListFragment().apply {
                 arguments = Bundle().apply {
                     putInt(AppConstants.REQUEST_TYPE_POSITION, position)
                 }

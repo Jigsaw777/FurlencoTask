@@ -1,7 +1,7 @@
 package com.example.furlencotask.data
 
 import com.example.furlencotask.data.services.networkRequests.GetServices
-import com.example.furlencotask.domain.AppDatabase
+import com.example.furlencotask.AppDatabase
 import com.example.furlencotask.domain.Repository
 import com.example.furlencotask.domain.entities.RequestType
 import com.example.furlencotask.domain.entities.dbEntities.DBNewsEntity
