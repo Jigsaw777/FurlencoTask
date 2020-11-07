@@ -5,8 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.FavouritesBaseFragment"
-    android:background="@color/white"
-    android:padding="@dimen/spacing_4">
+    android:background="@color/white">
 
     <FrameLayout
         android:id="@+id/favs_container"

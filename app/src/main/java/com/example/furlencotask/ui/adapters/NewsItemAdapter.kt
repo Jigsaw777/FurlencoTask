@@ -24,30 +24,34 @@ class NewsItemAdapter(
     }
 
     fun updateItem(pair: Pair<String, Boolean>) {
-        val item = list.first { element -> element.newsUrl == pair.first }
-        val updatedItem = DBNewsEntity(
-            author = item.author,
-            title = item.title,
-            description = item.description,
-            newsUrl = item.newsUrl,
-            imageUrl = item.imageUrl,
-            publishDateInMillis = item.publishDateInMillis,
-            content = item.content,
-            type = item.type,
-            isFavourite = pair.second
-        )
-        val pos = list.indexOf(item)
-        list.removeAt(pos)
-        list.add(pos, updatedItem)
-        notifyItemChanged(pos)
+        val item = list.firstOrNull { element -> element.newsUrl == pair.first }
+        if (item != null) {
+            val updatedItem = DBNewsEntity(
+                author = item.author,
+                title = item.title,
+                description = item.description,
+                newsUrl = item.newsUrl,
+                imageUrl = item.imageUrl,
+                publishDateInMillis = item.publishDateInMillis,
+                content = item.content,
+                type = item.type,
+                isFavourite = pair.second
+            )
+            val pos = list.indexOf(item)
+            list.removeAt(pos)
+            list.add(pos, updatedItem)
+            notifyItemChanged(pos)
+        }
     }
 
     fun removeItem(pair: Pair<String, Boolean>) {
-        val item = list.first { element -> element.newsUrl == pair.first }
-        if (!pair.second) {
-            val pos = list.indexOf(item)
-            list.removeAt(pos)
-            notifyItemRemoved(pos)
+        val item = list.firstOrNull { element -> element.newsUrl == pair.first }
+        if (item != null) {
+            if (!pair.second) {
+                val pos = list.indexOf(item)
+                list.removeAt(pos)
+                notifyItemRemoved(pos)
+            }
         }
     }
 

@@ -36,8 +36,8 @@ class FavouritesBaseFragment : Fragment(), OnItemClick {
     }
 
     override fun onClick(url: String) {
-        childFragmentManager.beginTransaction()
+        parentFragmentManager.beginTransaction()
             .add(R.id.favs_container, ShowNewsFragment.newInstance(url))
-            .addToBackStack(null).commitAllowingStateLoss()
+            .addToBackStack(null).commit()
     }
 }
