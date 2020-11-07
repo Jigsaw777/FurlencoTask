@@ -55,6 +55,8 @@ class NewsItemAdapter(
         }
     }
 
+    fun isEmpty() : Boolean = list.isEmpty()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewsItemViewHolder {
         return NewsItemViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.new_item_layout, parent, false),

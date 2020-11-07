@@ -1,10 +1,10 @@
 package com.example.furlencotask.di
 
 import android.app.Application
+import com.example.furlencotask.AppDatabase
 import com.example.furlencotask.data.RepoImpl
 import com.example.furlencotask.data.constants.AppConstants
 import com.example.furlencotask.data.services.networkRequests.GetServices
-import com.example.furlencotask.AppDatabase
 import com.example.furlencotask.domain.Repository
 import com.example.furlencotask.domain.usecases.*
 import dagger.Module
@@ -76,5 +76,9 @@ object ClassModules {
     @Provides
     fun updateFavouriteUseCase(repository: Repository): UpdateFavouriteValueUseCase =
         UpdateFavouriteValueUseCase(repository)
+
+    @Provides
+    fun clearTablesUseCase(repository: Repository): ClearTableUseCase =
+        ClearTableUseCase(repository)
 
 }

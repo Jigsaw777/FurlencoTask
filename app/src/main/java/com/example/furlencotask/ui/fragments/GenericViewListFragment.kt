@@ -57,6 +57,12 @@ class GenericViewListFragment : Fragment() {
         rv_news.adapter = adapter
 
         viewModel.newsResultsLD.observe(viewLifecycleOwner, {
+            if (it.isEmpty()) {
+                tv_blank_content.visibility = View.VISIBLE
+            } else {
+                tv_blank_content.visibility = View.GONE
+            }
+            pb_loading.visibility = View.GONE
             adapter.setItems(it)
         })
 

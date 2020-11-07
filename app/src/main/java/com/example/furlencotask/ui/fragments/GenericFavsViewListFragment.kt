@@ -52,12 +52,23 @@ class GenericFavsViewListFragment : Fragment() {
         rv_news.adapter = adapter
 
         viewModel.newsResultsLD.observe(viewLifecycleOwner, {
+            if (it.isEmpty()) {
+                tv_blank_content.setText(R.string.no_favs)
+                tv_blank_content.visibility = View.VISIBLE
+            } else {
+                tv_blank_content.visibility = View.GONE
+            }
+            pb_loading.visibility = View.GONE
             adapter.setItems(it)
         })
 
         viewModel.changeFavouriteLD.observe(viewLifecycleOwner, {
             adapter.removeItem(it)
             activityVM.onChangeFav(it)
+            if(adapter.isEmpty()){
+                tv_blank_content.setText(R.string.no_favs)
+                tv_blank_content.visibility = View.VISIBLE
+            }
         })
 
         viewModel.getFavs(params ?: 0)

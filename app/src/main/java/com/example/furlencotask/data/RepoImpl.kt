@@ -8,6 +8,7 @@ import com.example.furlencotask.domain.entities.dbEntities.DBNewsEntity
 import com.example.furlencotask.domain.entities.networkEntities.ResponseEntity
 import com.example.furlencotask.domain.requests.FetchNewsRequest
 import io.reactivex.Completable
+import io.reactivex.Observable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -39,5 +40,9 @@ class RepoImpl
 
     override fun updateFavouriteValue(newsUrl:String, isFavourite: Boolean): Completable {
         return database.newsEntityDao().updateFavourite(newsUrl, isFavourite)
+    }
+
+    override fun clearTable(): Completable {
+       return database.newsEntityDao().clearTable()
     }
 }

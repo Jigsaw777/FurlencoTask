@@ -30,5 +30,5 @@ interface NewsEntityDao {
     fun updateFavourite(newsUrl: String, isFavourite: Boolean): Completable
 
     @Query(DBConstants.DELETE_NEWS)
-    fun clearTable()
+    fun clearTable(): Completable
 }
