@@ -18,16 +18,19 @@ import io.reactivex.Single
 interface NewsEntityDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(news: List<DBNewsEntity>)
+    fun insertAll(news: List<DBNewsEntity>): Completable
 
     @Query(DBConstants.GET_STORED_NEWS)
-    fun getNews(type: String): Single<List<DBNewsEntity>>
+    fun getNews(type: String, limit: Int, offset: Int): Single<List<DBNewsEntity>>
 
     @Query(DBConstants.GET_FAVOURITE_NEWS)
     fun getFavouriteNews(type: String): Single<List<DBNewsEntity>>
 
     @Query(DBConstants.UPDATE_FAVOURITE)
     fun updateFavourite(newsUrl: String, isFavourite: Boolean): Completable
+
+    @Query(DBConstants.GET_ROW_COUNT)
+    fun getRowCount(type: String): Single<Int>
 
     @Query(DBConstants.DELETE_NEWS)
     fun clearTable(): Completable

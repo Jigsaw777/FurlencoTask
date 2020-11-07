@@ -81,4 +81,8 @@ object ClassModules {
     fun clearTablesUseCase(repository: Repository): ClearTableUseCase =
         ClearTableUseCase(repository)
 
+    @Provides
+    fun getRowCountUseCase(repository: Repository): GetRowCountUseCase =
+        GetRowCountUseCase(repository)
+
 }

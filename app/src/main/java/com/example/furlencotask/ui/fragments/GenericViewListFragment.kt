@@ -1,13 +1,17 @@
 package com.example.furlencotask.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.example.furlencotask.R
 import com.example.furlencotask.data.constants.AppConstants
@@ -27,6 +31,8 @@ class GenericViewListFragment : Fragment() {
     private var params: Int? = null
 
     private lateinit var adapter: NewsItemAdapter
+    private lateinit var manager: LinearLayoutManager
+    private var isScrolling = false
 
     private lateinit var onItemClick: OnItemClick
 
@@ -44,23 +50,23 @@ class GenericViewListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        Log.d("Generic fragment", "Fragment : $this  and view model : $viewModel")
         params = arguments?.getInt(AppConstants.REQUEST_TYPE_POSITION)
         initViews()
         initListeners()
-        viewModel.isTableEmpty(params ?: 0)
+        viewModel.setRowCount(params ?: 0)
     }
 
-    private fun initViews(){
+    private fun initViews() {
         adapter = NewsItemAdapter({
             showNews(it ?: "")
         }, {
             viewModel.toggleFavouriteValue(it)
         })
-        rv_news.layoutManager = LinearLayoutManager(context)
+        manager = LinearLayoutManager(context)
+        rv_news.layoutManager = manager
         (rv_news.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_news.adapter = adapter
-
     }
 
     private fun initListeners(){
@@ -68,6 +74,7 @@ class GenericViewListFragment : Fragment() {
             if (it.isEmpty()) {
                 tv_blank_content.visibility = View.VISIBLE
             } else {
+                viewModel.pageNumber += 1
                 tv_blank_content.visibility = View.GONE
             }
             pb_loading.visibility = View.GONE
@@ -76,7 +83,9 @@ class GenericViewListFragment : Fragment() {
 
         viewModel.listEmptyLD.observe(viewLifecycleOwner, {
             if (it)
-                viewModel.getNews(params ?: 0)
+                viewModel.getNews(
+                    params ?: 0
+                )
             else
                 viewModel.fetchNewsFromLocal(params ?: 0)
         })
@@ -85,8 +94,41 @@ class GenericViewListFragment : Fragment() {
             adapter.updateItem(it)
         })
 
-        activityVM.onChangedFav.observe(viewLifecycleOwner,{
+        activityVM.onChangedFav.observe(viewLifecycleOwner, {
             adapter.updateItem(it)
+        })
+
+        viewModel.successMsg.observe(viewLifecycleOwner, {
+            Toast.makeText(context, "it", Toast.LENGTH_SHORT).show()
+        })
+
+        viewModel.errorMsg.observe(viewLifecycleOwner, {
+            Toast.makeText(context, "it", Toast.LENGTH_SHORT).show()
+        })
+
+        viewModel.rowCountSetLD.observe(viewLifecycleOwner, {
+            if (it) {
+                viewModel.isTableEmpty(params ?: 0)
+            } else
+                Toast.makeText(context, AppConstants.VM_ERROR_MSG, Toast.LENGTH_SHORT).show()
+        })
+
+        rv_news.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                    isScrolling = true
+            }
+
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (isScrolling && (manager.childCount + manager.findFirstVisibleItemPosition() == manager.itemCount)) {
+                    isScrolling = false
+                    viewModel.getNews(
+                        params ?: 0
+                    )
+                }
+            }
         })
     }
 

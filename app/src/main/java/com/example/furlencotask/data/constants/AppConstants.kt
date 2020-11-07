@@ -13,6 +13,8 @@ object AppConstants {
     const val REQUEST_TYPE_POSITION = "position"
     const val NEWS_URL = "news_url"
 
+    const val SHARED_PREFS_TOTAL_COUNT = "TotalCountSharedPrefsAppData"
+
     const val ADDED_FAVOURITES = "Added your favourite"
     const val REMOVED_FAVOURITES = "Removed your favourite"
 
@@ -21,4 +23,6 @@ object AppConstants {
         "This will clear all current data in the app and refresh the app with new updated data. Are you sure you want to proceed with this ?"
     const val POSITIVE = "Yes, I'm sure"
     const val NEGATIVE = "I'll do this later"
+    const val SIZE_OF_PAGE = 10
+    const val IS_FIRST_TIME = "is_first_time_for"
 }

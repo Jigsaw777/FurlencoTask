@@ -14,7 +14,8 @@ class FetchNewsRequest(
         val params = HashMap<String, String>()
         params["category"] = category.requestString
         params["page"] = pageNumber.toString()
-        params["apiKey"] = "58537123cd884d6fa7fdef77906d0886"
+//        params["apiKey"] = "58537123cd884d6fa7fdef77906d0886"
+        params["apiKey"] = "3de65ab68dc64ed5a30d3f90a4a7f597"
         params["pageSize"] = "10"
         params["country"] = "in"
         return params;

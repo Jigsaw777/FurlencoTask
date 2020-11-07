@@ -13,10 +13,11 @@ import java.util.*
  */
 
 interface Repository {
-    fun getNewsFromLocal(newsRequest: FetchNewsRequest): Single<ResponseEntity>
-    fun insertNews(list: List<DBNewsEntity>)
-    fun getNewsFromLocal(type: RequestType): Single<List<DBNewsEntity>>
+    fun getNewsFromRemote(newsRequest: FetchNewsRequest): Single<ResponseEntity>
+    fun insertNews(list: List<DBNewsEntity>): Completable
+    fun getNewsFromLocal(type: RequestType, limit: Int, offset: Int): Single<List<DBNewsEntity>>
     fun getFavouriteNews(type: RequestType):Single<List<DBNewsEntity>>
     fun updateFavouriteValue(newsUrl:String, isFavourite:Boolean): Completable
+    fun getRowCount(type: RequestType): Single<Int>
     fun clearTable(): Completable
 }

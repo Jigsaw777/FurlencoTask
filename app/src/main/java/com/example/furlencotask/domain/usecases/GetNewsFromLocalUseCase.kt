@@ -11,7 +11,7 @@ import javax.inject.Inject
  */
 
 class GetNewsFromLocalUseCase @Inject constructor(private val repository: Repository) {
-    fun getNewsFromLocal(requestType: RequestType): Single<List<DBNewsEntity>> {
-        return repository.getNewsFromLocal(requestType)
+    fun getNewsFromLocal(requestType: RequestType, limit: Int, offset: Int): Single<List<DBNewsEntity>> {
+        return repository.getNewsFromLocal(requestType, limit, offset)
     }
 }

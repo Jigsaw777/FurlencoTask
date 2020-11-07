@@ -12,6 +12,6 @@ import javax.inject.Inject
 
 class GetNewsUseCase @Inject constructor(private val repository: Repository) {
     fun getNews(newsRequest: FetchNewsRequest): Single<ResponseEntity> {
-        return repository.getNewsFromLocal(newsRequest)
+        return repository.getNewsFromRemote(newsRequest)
     }
 }
