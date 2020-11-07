@@ -46,7 +46,12 @@ class GenericViewListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         params = arguments?.getInt(AppConstants.REQUEST_TYPE_POSITION)
+        initViews()
+        initListeners()
+        viewModel.isTableEmpty(params ?: 0)
+    }
 
+    private fun initViews(){
         adapter = NewsItemAdapter({
             showNews(it ?: "")
         }, {
@@ -56,6 +61,9 @@ class GenericViewListFragment : Fragment() {
         (rv_news.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_news.adapter = adapter
 
+    }
+
+    private fun initListeners(){
         viewModel.newsResultsLD.observe(viewLifecycleOwner, {
             if (it.isEmpty()) {
                 tv_blank_content.visibility = View.VISIBLE
@@ -80,8 +88,6 @@ class GenericViewListFragment : Fragment() {
         activityVM.onChangedFav.observe(viewLifecycleOwner,{
             adapter.updateItem(it)
         })
-
-        viewModel.isTableEmpty(params ?: 0)
     }
 
     fun setReference(onItemClick: OnItemClick) {

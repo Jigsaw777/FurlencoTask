@@ -41,7 +41,12 @@ class GenericFavsViewListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         params = arguments?.getInt(AppConstants.REQUEST_TYPE_POSITION)
+        initViews()
+        initListeners()
+        viewModel.getFavs(params ?: 0)
+    }
 
+    private fun initViews(){
         adapter = NewsItemAdapter({
             showNews(it ?: "")},
             {
@@ -50,7 +55,9 @@ class GenericFavsViewListFragment : Fragment() {
         rv_news.layoutManager = LinearLayoutManager(context)
         (rv_news.itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
         rv_news.adapter = adapter
+    }
 
+    private fun initListeners(){
         viewModel.newsResultsLD.observe(viewLifecycleOwner, {
             if (it.isEmpty()) {
                 tv_blank_content.setText(R.string.no_favs)
@@ -70,8 +77,6 @@ class GenericFavsViewListFragment : Fragment() {
                 tv_blank_content.visibility = View.VISIBLE
             }
         })
-
-        viewModel.getFavs(params ?: 0)
     }
 
     fun setReference(onItemClick: OnItemClick) {
